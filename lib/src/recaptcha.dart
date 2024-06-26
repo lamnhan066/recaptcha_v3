@@ -7,12 +7,6 @@ import 'recaptcha_native.dart' if (dart.library.js_interop) 'recaptcha_web.dart'
 ///
 /// `Supports only web.`
 class Recaptcha {
-  /// Check if the `Recaptcha` is ready to use.
-  static bool get isReady => recap.RecaptchaImpl.isReady;
-
-  /// Wait until the `Recaptcha` is ready to use.
-  static Future<void> get ensureReady => recap.RecaptchaImpl.ensureReady;
-
   /// use in `main()` or before `execute()`
   ///
   /// `Supports only web.`

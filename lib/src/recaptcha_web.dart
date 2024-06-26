@@ -34,24 +34,15 @@ extension OptionsExtension on Options {
 /// use `Recaptcha` not ~RecaptchaPlatformInterace~
 class RecaptchaImpl {
   static String? _recaptchaKey;
-
-  /// Check if the `Recaptcha` is ready to use.
-  static bool get isReady => _completer.isCompleted;
-
-  /// Wait until the `Recaptcha` is ready to use.
-  static Future<void> get ensureReady => _completer.future;
-
   static final _completer = Completer<void>();
 
   /// This method should be called before calling `execute()` method.
   static Future<void> ready(String key, bool showBadge) async {
     if (!kIsWeb) return;
-
-    if (isReady) return;
+    if (_completer.isCompleted) return;
 
     _recaptchaKey = key;
     await _maybeLoadLibrary();
-    await null;
     await _waitForGrecaptchaReady();
     changeVisibility(showBadge);
     debugPrint('gRecaptcha V3 ready');
@@ -78,7 +69,7 @@ class RecaptchaImpl {
             }.toJS)
             .toDart;
       } catch (e) {
-        await Future.delayed(const Duration(milliseconds: 100));
+        await Future.delayed(const Duration(milliseconds: 10));
         complete(true);
       }
 
@@ -88,6 +79,7 @@ class RecaptchaImpl {
 
   /// use `Recaptcha` not ~RecaptchaPlatformInterace~
   static Future<String?> execute(String action) async {
+    await _completer.future;
     if (!kIsWeb) return null;
     if (_recaptchaKey == null) {
       throw Exception('gRecaptcha V3 key not set : Try calling ready() first.');
@@ -147,7 +139,7 @@ class RecaptchaImpl {
         }
         return false;
       }
-      await Future.delayed(const Duration(milliseconds: 100));
+      await Future.delayed(const Duration(milliseconds: 10));
       return true;
     });
 

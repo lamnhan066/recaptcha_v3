@@ -2,14 +2,11 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:recaptcha/recaptcha.dart';
+import 'package:recaptcha/recaptcha_v3.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Recaptcha.ready(
-    "6Lfl7coUAAAAAKUjryaKQDhrrklXE9yrvWNXqKTj",
-    showBadge: false,
-  ); //--2
+  Recaptcha.ready("6Lfl7coUAAAAAKUjryaKQDhrrklXE9yrvWNXqKTj"); //--2
 
   runApp(const MyApp());
 }

@@ -1,5 +1,5 @@
 
-# recaptcha
+# recaptcha_v3
 
 Create Google reCAPTCHA v3 token for Flutter web.  Google reCAPTCHA v3 plugin for Flutter. A Google reCAPTCHA is a free service that protects your website from spam and abuse.
 
@@ -24,7 +24,7 @@ Create Google reCAPTCHA v3 token for Flutter web.  Google reCAPTCHA v3 plugin fo
 - Add `recaptcha` to pubspec.yaml
 
 ```bash
-  flutter pub add recaptcha
+  flutter pub add recaptcha_v3
 ```
 
 ## Development
@@ -51,7 +51,6 @@ The `ready()` method should be called before `execute()`
 import 'package:recaptcha/recaptcha.dart';
 
 void generateToken() async {
-  await Recaptcha.ensureReady;
   String? token = await Recaptcha.execute('<your_action>'); //--3
   print(token);
   // send token to server and verify
@@ -92,8 +91,17 @@ If in case recaptcha script gives you error for port other than port :80, you ca
   flutter run -d chrome --web-port 80
 ```
 
-### FAQ
+### Known Issues
 
-**Q:** How to hide reCaptcha until / before Flutter render its UI?
+1. This issue is shown in the console by the native code issue (cannot be catched by `try-catch` and can be ignored):
 
-**A:** [https://github.com/bharathraj-e/recaptcha/issues/3](https://github.com/bharathraj-e/recaptcha/issues/3)
+```shell
+Error
+dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/errors.dart 296:3       throw_
+dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 893:3   defaultNoSuchMethod
+dart-sdk/lib/_internal/js_dev_runtime/patch/core_patch.dart 63:17                 noSuchMethod
+dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 868:31  noSuchMethod
+dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 318:12  callNSM
+dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 428:10  _checkAndCall
+dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 431:39  dcall
+```

@@ -22,11 +22,11 @@ extension GRecaptchaExtension on Grecaptcha {
 @anonymous
 @staticInterop
 extension type Options._(JSObject _) implements JSObject {
-  external factory Options({String action});
+  external factory Options({JSString action});
 }
 
 extension OptionsExtension on Options {
-  external String get action;
+  external JSString get action;
 }
 
 /// A web implementation of the Recaptcha plugin.
@@ -62,6 +62,18 @@ class RecaptchaImpl {
         }
       }
 
+      // TODO: Figure out why the `grecaptcha.ready` is error even when the `grecaptcha` was loaded
+      // by checking the `globalContext.hasProperty('grecaptcha'.toJS)` variable.
+      //
+      // Caused this issue:
+      // Error
+      // dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/errors.dart 296:3       throw_
+      // dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 893:3   defaultNoSuchMethod
+      // dart-sdk/lib/_internal/js_dev_runtime/patch/core_patch.dart 63:17                 noSuchMethod
+      // dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 868:31  noSuchMethod
+      // dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 318:12  callNSM
+      // dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 428:10  _checkAndCall
+      // dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 431:39  dcall
       try {
         await grecaptcha
             .ready(() {
@@ -86,7 +98,7 @@ class RecaptchaImpl {
     }
     try {
       final result =
-          grecaptcha.execute(_recaptchaKey!.toJS, Options(action: action));
+          grecaptcha.execute(_recaptchaKey!.toJS, Options(action: action.toJS));
       return (await result.toDart).toDart;
     } catch (e) {
       debugPrint(e.toString());

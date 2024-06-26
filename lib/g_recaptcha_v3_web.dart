@@ -2,6 +2,7 @@ library g_recaptcha_v3_web;
 
 import 'dart:async';
 import 'dart:js_interop';
+import 'dart:js_interop_unsafe';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
@@ -66,35 +67,39 @@ class GRecaptchaV3PlatformInterface {
     if (!kIsWeb) return false;
 
     _gRecaptchaV3Key = key;
-    if (await _waitForGrecaptchaReady()) {
-      changeVisibility(showBadge);
-      debugPrint('gRecaptcha V3 ready');
-      return false;
-    }
+    await _maybeLoadLibrary();
+    await _waitForGrecaptchaReady();
+    changeVisibility(showBadge);
+    debugPrint('gRecaptcha V3 ready');
 
     return true;
   }
 
-  static Future<bool> _waitForGrecaptchaReady() async {
-    final completer = Completer<bool>();
-    void complete(bool isBreak) {
-      if (!completer.isCompleted) {
-        completer.complete(isBreak);
-      }
-    }
+  static Future<void> _waitForGrecaptchaReady() async {
+    await Future.delayed(const Duration(seconds: 1));
 
-    try {
-      await grecaptcha
-          .ready(() {
-            complete(true);
-          }.toJS)
-          .toDart;
-      complete(true);
-    } catch (e) {
-      await Future.delayed(const Duration(milliseconds: 20));
-      complete(false);
-    }
-    return completer.future;
+    await Future.doWhile(() async {
+      final completer = Completer<bool>();
+      void complete(bool isBreak) {
+        if (!completer.isCompleted) {
+          completer.complete(isBreak);
+        }
+      }
+
+      try {
+        await grecaptcha
+            .ready(() {
+              complete(false);
+            }.toJS)
+            .toDart;
+        complete(false);
+      } catch (e) {
+        await Future.delayed(const Duration(milliseconds: 100));
+        complete(true);
+      }
+
+      return completer.future;
+    });
   }
 
   /// use `GRecaptchaV3` not ~GRecaptchaV3PlatformInterace~
@@ -121,5 +126,46 @@ class GRecaptchaV3PlatformInterface {
     if (badge == null) return;
     badge.style.zIndex = "10";
     badge.style.visibility = showBagde ? "visible" : "hidden";
+  }
+
+  /// Load the barcode reader library.
+  ///
+  /// Does nothing if the library is already loaded.
+  static Future<void> _maybeLoadLibrary() async {
+    final completer = Completer();
+
+    const scriptId = 'g_recapcha_script';
+    final scriptUrl =
+        'https://www.google.com/recaptcha/api.js?render=$_gRecaptchaV3Key';
+
+    // Script already exists.
+    if (web.document.querySelector('script#$scriptId') != null) {
+      return;
+    }
+
+    final web.HTMLScriptElement script = web.HTMLScriptElement()
+      ..id = scriptId
+      ..src = scriptUrl;
+
+    script.onerror = (JSAny _) {
+      if (!completer.isCompleted) {
+        completer.completeError(Exception('The G reCaptcha cannot be loaded'));
+      }
+    }.toJS;
+
+    web.document.head!.appendChild(script);
+
+    Future.doWhile(() async {
+      if (globalContext.hasProperty('grecaptcha'.toJS).toDart) {
+        if (!completer.isCompleted) {
+          completer.complete();
+        }
+        return false;
+      }
+      await Future.delayed(const Duration(milliseconds: 100));
+      return true;
+    });
+
+    return completer.future;
   }
 }

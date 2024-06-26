@@ -1,19 +1,15 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:g_recaptcha_v3/g_recaptcha_v3.dart';
+import 'package:recaptcha/recaptcha.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  if (kIsWeb) {
-    bool ready = await GRecaptchaV3.ready(
-        "6Lfl7coUAAAAAKUjryaKQDhrrklXE9yrvWNXqKTj",
-        showBadge: true); //--2
-    // ignore: avoid_print
-    print("Is Recaptcha ready? $ready");
-  }
+  Recaptcha.ready(
+    "6Lfl7coUAAAAAKUjryaKQDhrrklXE9yrvWNXqKTj",
+    showBadge: false,
+  ); //--2
 
   runApp(const MyApp());
 }
@@ -30,7 +26,7 @@ class _MyAppState extends State<MyApp> {
   bool badgeVisible = true;
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> getToken() async {
-    String token = await GRecaptchaV3.execute('submit') ?? 'null returned';
+    String token = await Recaptcha.execute('submit') ?? 'null returned';
     setState(() {
       _token = token;
     });
@@ -56,9 +52,9 @@ class _MyAppState extends State<MyApp> {
               OutlinedButton.icon(
                 onPressed: () {
                   if (badgeVisible) {
-                    GRecaptchaV3.hideBadge();
+                    Recaptcha.hideBadge();
                   } else {
-                    GRecaptchaV3.showBadge();
+                    Recaptcha.showBadge();
                   }
                   badgeVisible = !badgeVisible;
                 },
@@ -69,10 +65,10 @@ class _MyAppState extends State<MyApp> {
                   label: const Icon(Icons.copy),
                   onPressed: () {
                     Clipboard.setData(const ClipboardData(
-                        text: "https://pub.dev/packages/g_recaptcha_v3"));
+                        text: "https://pub.dev/packages/recaptcha"));
                   },
                   icon: const SelectableText(
-                      "https://pub.dev/packages/g_recaptcha_v3")),
+                      "https://pub.dev/packages/recaptcha")),
             ],
           ),
         ),

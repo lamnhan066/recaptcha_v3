@@ -1,15 +1,13 @@
 
-# g_recaptcha_v3
+# recaptcha
 
 Create Google reCAPTCHA v3 token for Flutter web.  Google reCAPTCHA v3 plugin for Flutter. A Google reCAPTCHA is a free service that protects your website from spam and abuse.
 
-[![Pub](https://img.shields.io/pub/v/g_recaptcha_v3.svg?style=flat-square)](https://pub.dartlang.org/packages/g_recaptcha_v3)
-[![MIT License](https://img.shields.io/apm/l/atomic-design-ui.svg?style=flat-square)](https://github.com/bharathraj-e/g_recaptcha_v3/blob/dev/LICENSE)
+[![Pub](https://img.shields.io/pub/v/recaptcha.svg?style=flat-square)](https://pub.dartlang.org/packages/recaptcha)
 
-> [Web Demo](https://bharathraj-e.github.io/g_recaptcha_v3_example_build/)
+> [Web Demo](https://pub.github.io/recaptcha/)
 
-
-<img src='https://raw.githubusercontent.com/bharathraj-e/g_recaptcha_v3/dev/sample.gif' width='70%'>
+<img src='https://raw.githubusercontent.com/lamnhan066/recaptcha/dev/sample.gif' width='70%'>
 
 <hr>
 
@@ -17,67 +15,49 @@ Create Google reCAPTCHA v3 token for Flutter web.  Google reCAPTCHA v3 plugin fo
 
 #### Step 1
 
-- [Create your keys 🗝 ](https://www.google.com/recaptcha/admin)
+- [Create your keys 🗝](https://www.google.com/recaptcha/admin)
 - [ReCaptcha Docs](https://developers.google.com/recaptcha/docs/v3)
 - For development, add `localhost` as domain in reCaptcha console
 
 #### Step 2
 
-- Add the script inside `web/index.html` - `<head>` tag
-- Place it **before** the `main.dart.js` script (or) `flutter.js` script
-
-```html
-<head>
-  .
-  .
-  <!-- Step 2 -->
-  <script src="https://www.google.com/recaptcha/api.js?render=<your Recaptcha v3 site key>"></script>
-  <!-- Step 2 End -->
-  .
-  .
-  <script src="flutter.js" defer></script>
-</head>
-```
-#### Step 3
-
-- Add `g_recaptcha_v3` to pubspec.yaml
+- Add `recaptcha` to pubspec.yaml
 
 ```bash
-  flutter pub add g_recaptcha_v3
+  flutter pub add recaptcha
 ```
 
 ## Development
 
-### 1. GRecaptchaV3.ready()
+### 1. Recaptcha.ready()
 
 The `ready()` method should be called before `execute()`
 
 ````dart
-import 'package:g_recaptcha_v3/g_recaptcha_v3.dart'; //--1
+import 'package:recaptcha/recaptcha.dart'; //--1
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  if(kIsWeb){
-    bool ready = await GRecaptchaV3.ready("<your Recaptcha site key>"); //--2
-    print("Is Recaptcha ready? $ready");
-  }
+  Recaptcha.ready("<your Recaptcha site key>"); //--2
   runApp(const MyApp());
 }
 ````
 
-### 2. GRecaptchaV3.execute()
+### 2. Recaptcha.execute()
 
 The `ready()` method should be called before `execute()`
 
 ````dart
-import 'package:g_recaptcha_v3/g_recaptcha_v3.dart';
+import 'package:recaptcha/recaptcha.dart';
 
 void generateToken() async {
-  String? token = await GRecaptchaV3.execute('<your_action>'); //--3
+  await Recaptcha.ensureReady;
+  String? token = await Recaptcha.execute('<your_action>'); //--3
   print(token);
   // send token to server and verify
 }
 ````
+
 - `String action` - used to verify the string in backend. ( [action docs](https://developers.google.com/recaptcha/docs/v3#actions) )
 - `token` will be null if the,
   - web setup has any errors.
@@ -88,22 +68,22 @@ void generateToken() async {
 change the reCaptcha badge visibility
 
 ````dart
-    GRecaptchaV3.showBadge();
-    GRecaptchaV3.hideBadge();
+    Recaptcha.showBadge();
+    Recaptcha.hideBadge();
 ````
   
-## Warning!!!
+## Warning
   
 You are allowed to hide the badge as long as you `include the reCAPTCHA branding` visibly in the user flow.`
 
-Sample Image 
+Sample Image
 
 ![alternate way](https://developers.google.com/recaptcha/images/text_badge_example.png)
 
 ### [Read more about hiding in reCaptcha docs](https://developers.google.com/recaptcha/docs/faq#id-like-to-hide-the-recaptcha-badge.-what-is-allowed)
   
+### Web Port 80 setup
 
-### Web Port 80 setup 
 ##### (for localhost only)
 
 If in case recaptcha script gives you error for port other than port :80, you can use the following code to setup the port.
@@ -113,6 +93,7 @@ If in case recaptcha script gives you error for port other than port :80, you ca
 ```
 
 ### FAQ
+
 **Q:** How to hide reCaptcha until / before Flutter render its UI?
 
-**A:** [https://github.com/bharathraj-e/g_recaptcha_v3/issues/3](https://github.com/bharathraj-e/g_recaptcha_v3/issues/3)
+**A:** [https://github.com/bharathraj-e/recaptcha/issues/3](https://github.com/bharathraj-e/recaptcha/issues/3)

@@ -75,6 +75,7 @@ class GRecaptchaV3PlatformInterface {
     return true;
   }
 
+  /// TODO: Avoid using the `Future.delayed` if possible
   static Future<void> _waitForGrecaptchaReady() async {
     await Future.delayed(const Duration(seconds: 1));
 
@@ -155,6 +156,7 @@ class GRecaptchaV3PlatformInterface {
 
     web.document.head!.appendChild(script);
 
+    /// TODO: Avoid using the `Future.delayed` if possible
     Future.doWhile(() async {
       if (globalContext.hasProperty('grecaptcha'.toJS).toDart) {
         if (!completer.isCompleted) {

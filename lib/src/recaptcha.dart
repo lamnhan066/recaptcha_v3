@@ -1,12 +1,18 @@
 import 'dart:async';
 
-import 'recaptcha_native.dart'
-    if (dart.library.js_interop) 'g_recaptcha_v3_web.dart' as recap;
+import 'recaptcha_native.dart' if (dart.library.js_interop) 'recaptcha_web.dart'
+    as recap;
 
 /// This class is used to create a Google reCAPTCHA v3 token.
 ///
 /// `Supports only web.`
 class Recaptcha {
+  /// Check if the `Recaptcha` is ready to use.
+  static bool get isReady => recap.RecaptchaImpl.isReady;
+
+  /// Wait until the `Recaptcha` is ready to use.
+  static Future<void> get ensureReady => recap.RecaptchaImpl.ensureReady;
+
   /// use in `main()` or before `execute()`
   ///
   /// `Supports only web.`
@@ -25,8 +31,8 @@ class Recaptcha {
   ///
   /// You are allowed to hide the badge as long as you include the `reCAPTCHA branding visibly in the user flow.`
   ///
-  static Future<bool> ready(String siteKey, {bool showBadge = true}) async {
-    return await recap.RecaptchaImpl.ready(siteKey, showBadge);
+  static Future<void> ready(String siteKey, {bool showBadge = true}) async {
+    await recap.RecaptchaImpl.ready(siteKey, showBadge);
   }
 
   /// `ready()` method should be called before calling this method.

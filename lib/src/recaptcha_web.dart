@@ -13,7 +13,6 @@ external Grecaptcha get grecaptcha;
 @staticInterop
 class Grecaptcha {}
 
-@staticInterop
 extension GRecaptchaExtension on Grecaptcha {
   external JSPromise ready(JSFunction f);
   external JSPromise<JSString> execute(JSString key, Options options);
@@ -30,29 +29,40 @@ extension OptionsExtension on Options {
   external String get action;
 }
 
-/// A web implementation of the GRecaptchaV3 plugin.
+/// A web implementation of the Recaptcha plugin.
 ///
-/// use `GRecaptchaV3` not ~GRecaptchaV3PlatformInterace~
+/// use `Recaptcha` not ~RecaptchaPlatformInterace~
 class RecaptchaImpl {
-  static String? _gRecaptchaV3Key;
+  static String? _recaptchaKey;
+
+  /// Check if the `Recaptcha` is ready to use.
+  static bool get isReady => _completer.isCompleted;
+
+  /// Wait until the `Recaptcha` is ready to use.
+  static Future<void> get ensureReady => _completer.future;
+
+  static final _completer = Completer<void>();
 
   /// This method should be called before calling `execute()` method.
-  static Future<bool> ready(String key, bool showBadge) async {
-    if (!kIsWeb) return false;
+  static Future<void> ready(String key, bool showBadge) async {
+    if (!kIsWeb) return;
 
-    _gRecaptchaV3Key = key;
+    if (isReady) return;
+
+    _recaptchaKey = key;
     await _maybeLoadLibrary();
+    await null;
     await _waitForGrecaptchaReady();
     changeVisibility(showBadge);
     debugPrint('gRecaptcha V3 ready');
 
-    return true;
+    if (!_completer.isCompleted) {
+      _completer.complete();
+    }
   }
 
   /// TODO: Avoid using the `Future.delayed` if possible
   static Future<void> _waitForGrecaptchaReady() async {
-    await Future.delayed(const Duration(seconds: 1));
-
     await Future.doWhile(() async {
       final completer = Completer<bool>();
       void complete(bool isBreak) {
@@ -67,7 +77,6 @@ class RecaptchaImpl {
               complete(false);
             }.toJS)
             .toDart;
-        complete(false);
       } catch (e) {
         await Future.delayed(const Duration(milliseconds: 100));
         complete(true);
@@ -77,15 +86,15 @@ class RecaptchaImpl {
     });
   }
 
-  /// use `GRecaptchaV3` not ~GRecaptchaV3PlatformInterace~
+  /// use `Recaptcha` not ~RecaptchaPlatformInterace~
   static Future<String?> execute(String action) async {
     if (!kIsWeb) return null;
-    if (_gRecaptchaV3Key == null) {
+    if (_recaptchaKey == null) {
       throw Exception('gRecaptcha V3 key not set : Try calling ready() first.');
     }
     try {
       final result =
-          grecaptcha.execute(_gRecaptchaV3Key!.toJS, Options(action: action));
+          grecaptcha.execute(_recaptchaKey!.toJS, Options(action: action));
       return (await result.toDart).toDart;
     } catch (e) {
       debugPrint(e.toString());
@@ -111,7 +120,7 @@ class RecaptchaImpl {
 
     const scriptId = 'g_recapcha_script';
     final scriptUrl =
-        'https://www.google.com/recaptcha/api.js?render=$_gRecaptchaV3Key';
+        'https://www.google.com/recaptcha/api.js?render=$_recaptchaKey';
 
     // Script already exists.
     if (web.document.querySelector('script#$scriptId') != null) {

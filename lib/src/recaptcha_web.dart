@@ -1,12 +1,8 @@
-library g_recaptcha_v3_web;
-
 import 'dart:async';
 import 'dart:js_interop';
 import 'dart:js_interop_unsafe';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:web/web.dart' as web;
 
 @JS('grecaptcha')
@@ -37,30 +33,8 @@ extension OptionsExtension on Options {
 /// A web implementation of the GRecaptchaV3 plugin.
 ///
 /// use `GRecaptchaV3` not ~GRecaptchaV3PlatformInterace~
-class GRecaptchaV3PlatformInterface {
+class RecaptchaImpl {
   static String? _gRecaptchaV3Key;
-
-  static void registerWith(Registrar registrar) {
-    final MethodChannel channel = MethodChannel(
-      'g_recaptcha_v3',
-      const StandardMethodCodec(),
-      registrar,
-    );
-
-    final pluginInstance = GRecaptchaV3PlatformInterface();
-    channel.setMethodCallHandler(pluginInstance.handleMethodCall);
-  }
-
-  Future<dynamic> handleMethodCall(MethodCall call) async {
-    switch (call.method) {
-      default:
-        throw PlatformException(
-          code: 'Unimplemented',
-          details:
-              'g_recaptcha_v3 for web doesn\'t implement \'${call.method}\'',
-        );
-    }
-  }
 
   /// This method should be called before calling `execute()` method.
   static Future<bool> ready(String key, bool showBadge) async {

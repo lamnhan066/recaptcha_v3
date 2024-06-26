@@ -1,14 +1,12 @@
-library g_recaptcha_v3;
-
 import 'dart:async';
 
-import '_g_recaptcha_v3_native.dart'
-    if (dart.library.html) 'g_recaptcha_v3_web.dart' as recap;
+import 'recaptcha_native.dart'
+    if (dart.library.js_interop) 'g_recaptcha_v3_web.dart' as recap;
 
 /// This class is used to create a Google reCAPTCHA v3 token.
 ///
 /// `Supports only web.`
-class GRecaptchaV3 {
+class Recaptcha {
   /// use in `main()` or before `execute()`
   ///
   /// `Supports only web.`
@@ -28,7 +26,7 @@ class GRecaptchaV3 {
   /// You are allowed to hide the badge as long as you include the `reCAPTCHA branding visibly in the user flow.`
   ///
   static Future<bool> ready(String siteKey, {bool showBadge = true}) async {
-    return await recap.GRecaptchaV3PlatformInterface.ready(siteKey, showBadge);
+    return await recap.RecaptchaImpl.ready(siteKey, showBadge);
   }
 
   /// `ready()` method should be called before calling this method.
@@ -41,7 +39,7 @@ class GRecaptchaV3 {
   ///
   /// `Supports only web.`
   static Future<String?> execute(String action) async {
-    return await recap.GRecaptchaV3PlatformInterface.execute(action);
+    return await recap.RecaptchaImpl.execute(action);
   }
 
   /// change the reCaptcha badge visibility
@@ -57,13 +55,13 @@ class GRecaptchaV3 {
   ///![alternate way](https://developers.google.com/recaptcha/images/text_badge_example.png)
   ///
   static Future<void> hideBadge() async {
-    await recap.GRecaptchaV3PlatformInterface.changeVisibility(false);
+    await recap.RecaptchaImpl.changeVisibility(false);
   }
 
   /// change the reCaptcha badge visibility
   ///
   /// sets z-index of recatpcha badge to `10` to be on top of flutter elements
   static Future<void> showBadge() async {
-    await recap.GRecaptchaV3PlatformInterface.changeVisibility(true);
+    await recap.RecaptchaImpl.changeVisibility(true);
   }
 }

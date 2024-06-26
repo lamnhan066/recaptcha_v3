@@ -1,7 +1,7 @@
 /// A web implementation of the GRecaptchaV3 plugin.
 ///
 /// use `GRecaptchaV3` not ~GRecaptchaV3PlatformInterace~
-class GRecaptchaV3PlatformInterface {
+class RecaptchaImpl {
   /// use `GRecaptchaV3` not ~GRecaptchaV3Platform~
   static Future<bool> ready(String key, bool showBadge) async {
     return false;

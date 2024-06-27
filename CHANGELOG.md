@@ -1,3 +1,7 @@
+## 0.0.3
+
+* Add the `RecaptchaBrand` widget.
+
 ## 0.0.2
 
 * The `showBadge` and `hideBadge` work properly when built to WASM.

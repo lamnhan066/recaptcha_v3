@@ -82,6 +82,8 @@ Sample Image
 ![alternate way](https://developers.google.com/recaptcha/images/text_badge_example.png)
 
 ### [Read more about hiding in reCaptcha docs](https://developers.google.com/recaptcha/docs/faq#id-like-to-hide-the-recaptcha-badge.-what-is-allowed)
+
+You can use the `RecaptchaBrand` widget to show the reCaptcha brand.
   
 ### Web Port 80 setup
 

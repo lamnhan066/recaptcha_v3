@@ -1,3 +1,9 @@
+## 0.0.2
+
+* The `showBadge` and `hideBadge` work properly when built to WASM.
+* Fix some TYPO.
+* Update README.
+
 ## 0.0.1+1
 
 * Forked from @bharathraj-e.

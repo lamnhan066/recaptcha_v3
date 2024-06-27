@@ -1,13 +1,15 @@
 
-# recaptcha_v3
+# Recaptcha v3
 
-Create Google reCAPTCHA v3 token for Flutter web.  Google reCAPTCHA v3 plugin for Flutter. A Google reCAPTCHA is a free service that protects your website from spam and abuse.
+A forked version of [g_recaptcha_v3](https://github.com/bharathraj-e/g_recaptcha_v3) for my own purpose with automatically loading the script and WASM compilation because the original version almost 2 years without updated.
 
-[![Pub](https://img.shields.io/pub/v/recaptcha.svg?style=flat-square)](https://pub.dartlang.org/packages/recaptcha)
+Create Google reCAPTCHA v3 token for Flutter web. Google reCAPTCHA v3 plugin for Flutter. A Google reCAPTCHA is a free service that protects your website from spam and abuse.
 
-> [Web Demo](https://pub.github.io/recaptcha/)
+[![Pub](https://img.shields.io/pub/v/recaptcha_v3.svg?style=flat-square)](https://pub.dartlang.org/packages/recaptcha_v3)
 
-<img src='https://raw.githubusercontent.com/lamnhan066/recaptcha/dev/sample.gif' width='70%'>
+> [Web Demo (Build with WASM)](https://pub.lamnhan.dev/recaptcha_v3/)
+
+<img src='https://raw.githubusercontent.com/lamnhan066/recaptcha_v3/main/sample.gif' width='70%'>
 
 <hr>
 
@@ -21,7 +23,7 @@ Create Google reCAPTCHA v3 token for Flutter web.  Google reCAPTCHA v3 plugin fo
 
 #### Step 2
 
-- Add `recaptcha` to pubspec.yaml
+- Add `recaptcha_v3` to pubspec.yaml
 
 ```bash
   flutter pub add recaptcha_v3
@@ -34,7 +36,7 @@ Create Google reCAPTCHA v3 token for Flutter web.  Google reCAPTCHA v3 plugin fo
 The `ready()` method should be called before `execute()`
 
 ````dart
-import 'package:recaptcha/recaptcha.dart'; //--1
+import 'package:recaptcha_v3/recaptcha_v3.dart'; //--1
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -48,7 +50,7 @@ void main() async {
 The `ready()` method should be called before `execute()`
 
 ````dart
-import 'package:recaptcha/recaptcha.dart';
+import 'package:recaptcha_v3/recaptcha_v3.dart';
 
 void generateToken() async {
   String? token = await Recaptcha.execute('<your_action>'); //--3

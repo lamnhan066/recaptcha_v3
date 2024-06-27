@@ -3,6 +3,7 @@ import 'dart:js_interop';
 import 'dart:js_interop_unsafe';
 
 import 'package:flutter/foundation.dart';
+import 'package:web/helpers.dart';
 import 'package:web/web.dart' as web;
 
 @JS('grecaptcha')
@@ -110,7 +111,7 @@ class RecaptchaImpl {
   /// change the reCaptcha badge visibility
   static Future<void> changeVisibility(bool showBagde) async {
     if (!kIsWeb) return;
-    var badge = web.document.querySelector(".grecaptcha-badge") as dynamic;
+    var badge = web.document.querySelector(".grecaptcha-badge") as HTMLElement?;
     if (badge == null) return;
     badge.style.zIndex = "10";
     badge.style.visibility = showBagde ? "visible" : "hidden";

@@ -42,9 +42,14 @@ class _MyAppState extends State<MyApp> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SelectableText('Token: $_token\n'),
-              ElevatedButton(
-                onPressed: getToken,
-                child: const Text('Get new token'),
+              Column(
+                children: [
+                  ElevatedButton(
+                    onPressed: getToken,
+                    child: const Text('Get new token'),
+                  ),
+                  if (!badgeVisible) const RecaptchaBrand(),
+                ],
               ),
               OutlinedButton.icon(
                 onPressed: () {
@@ -53,7 +58,9 @@ class _MyAppState extends State<MyApp> {
                   } else {
                     Recaptcha.showBadge();
                   }
-                  badgeVisible = !badgeVisible;
+                  setState(() {
+                    badgeVisible = !badgeVisible;
+                  });
                 },
                 icon: const Icon(Icons.legend_toggle),
                 label: const Text("Toggle Badge Visibilty"),

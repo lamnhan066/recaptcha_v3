@@ -35,7 +35,7 @@ Create Google reCAPTCHA v3 token for Flutter web. Google reCAPTCHA v3 plugin for
 
 The `ready()` method should be called before `execute()`
 
-````dart
+```dart
 import 'package:recaptcha_v3/recaptcha_v3.dart'; //--1
 
 void main() async {
@@ -43,13 +43,13 @@ void main() async {
   Recaptcha.ready("<your Recaptcha site key>"); //--2
   runApp(const MyApp());
 }
-````
+```
 
 ### 2. Recaptcha.execute()
 
 The `ready()` method should be called before `execute()`
 
-````dart
+```dart
 import 'package:recaptcha_v3/recaptcha_v3.dart';
 
 void generateToken() async {
@@ -57,7 +57,7 @@ void generateToken() async {
   print(token);
   // send token to server and verify
 }
-````
+```
 
 - `String action` - used to verify the string in backend. ( [action docs](https://developers.google.com/recaptcha/docs/v3#actions) )
 - `token` will be null if the,
@@ -68,10 +68,30 @@ void generateToken() async {
 
 change the reCaptcha badge visibility
 
-````dart
-    Recaptcha.showBadge();
-    Recaptcha.hideBadge();
-````
+```dart
+Recaptcha.showBadge();
+Recaptcha.hideBadge();
+```
+
+or you can toogle the badge visibility using:
+
+```dart
+Recaptcha.toogleBadge();
+```
+
+### 4. The reCAPTCHA branding Widget
+
+```dart
+RecaptchaBrand();
+```
+
+This brand will automatically show/hide regarding to the state of the badge. So you just need to put it anywhere you want without any condition.
+
+### 5. A `ValueListenable` of the badge's show/hide state
+
+```dart
+final isShowing = Recaptcha.isShowingBadge.value;
+```
   
 ## Warning
   

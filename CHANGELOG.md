@@ -1,3 +1,9 @@
+## 0.1.0
+
+* Add `isShowingBadge` as a `ValueListenable`.
+* Add `toogleBadge` method.
+* Improve README.
+
 ## 0.0.3+1
 
 * Improve the pub score.

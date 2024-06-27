@@ -2,17 +2,17 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:recaptcha/recaptcha_v3.dart';
+import 'package:recaptcha_v3/recaptcha_v3.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Recaptcha.ready("6Lfl7coUAAAAAKUjryaKQDhrrklXE9yrvWNXqKTj"); //--2
+  Recaptcha.ready("6LfrUQIqAAAAANcqDEjzz54Zy3niDcGg04wKEPEj"); //--2
 
   runApp(const MyApp());
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -62,10 +62,10 @@ class _MyAppState extends State<MyApp> {
                   label: const Icon(Icons.copy),
                   onPressed: () {
                     Clipboard.setData(const ClipboardData(
-                        text: "https://pub.dev/packages/recaptcha"));
+                        text: "https://pub.dev/packages/recaptcha_v3"));
                   },
                   icon: const SelectableText(
-                      "https://pub.dev/packages/recaptcha")),
+                      "https://pub.dev/packages/recaptcha_v3")),
             ],
           ),
         ),

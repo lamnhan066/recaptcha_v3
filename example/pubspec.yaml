@@ -1,4 +1,4 @@
-name: recaptcha_example
+name: recaptcha_v3_example
 description: Demonstrates how to use the recaptcha plugin.
 
 # The following line prevents the package from being accidentally published to
@@ -6,7 +6,7 @@ description: Demonstrates how to use the recaptcha plugin.
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=3.3.0"
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -18,7 +18,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  recaptcha:
+  recaptcha_v3:
     # When depending on this package from a real application you should use:
     #   recaptcha: ^x.y.z
     # See https://dart.dev/tools/pub/dependencies#version-constraints

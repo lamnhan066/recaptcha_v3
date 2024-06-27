@@ -35,6 +35,10 @@ extension OptionsExtension on Options {
 class RecaptchaImpl {
   static String? _recaptchaKey;
   static final _completer = Completer<void>();
+  static final _isShowingBadge = ValueNotifier(false);
+
+  /// Return `true` if the badge is showing.
+  static ValueNotifier<bool> get isShowingBadge => _isShowingBadge;
 
   /// This method should be called before calling `execute()` method.
   static Future<void> ready(String key, bool showBadge) async {
@@ -108,12 +112,13 @@ class RecaptchaImpl {
   }
 
   /// change the reCaptcha badge visibility
-  static Future<void> changeVisibility(bool showBagde) async {
+  static Future<void> changeVisibility(bool showBadge) async {
     if (!kIsWeb) return;
     var badge = document.querySelector(".grecaptcha-badge") as HTMLElement?;
     if (badge == null) return;
     badge.style.zIndex = "10";
-    badge.style.visibility = showBagde ? "visible" : "hidden";
+    badge.style.visibility = showBadge ? "visible" : "hidden";
+    _isShowingBadge.value = showBadge;
   }
 
   /// Load the barcode reader library.

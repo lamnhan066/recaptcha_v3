@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:flutter/material.dart';
+
 import 'recaptcha_native.dart' if (dart.library.js_interop) 'recaptcha_web.dart'
     as recap;
 
@@ -7,6 +9,10 @@ import 'recaptcha_native.dart' if (dart.library.js_interop) 'recaptcha_web.dart'
 ///
 /// `Supports only web.`
 class Recaptcha {
+  /// Return `true` if the badge is showing.
+  static ValueNotifier<bool> get isShowingBadge =>
+      recap.RecaptchaImpl.isShowingBadge;
+
   /// use in `main()` or before `execute()`
   ///
   /// `Supports only web.`
@@ -63,5 +69,14 @@ class Recaptcha {
   /// sets z-index of recatpcha badge to `10` to be on top of flutter elements
   static Future<void> showBadge() async {
     await recap.RecaptchaImpl.changeVisibility(true);
+  }
+
+  /// toogle the reCaptcha badge visibility
+  static Future<void> toogleBadge() async {
+    if (isShowingBadge.value) {
+      await hideBadge();
+    } else {
+      await showBadge();
+    }
   }
 }

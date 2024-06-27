@@ -20,7 +20,6 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   String _token = 'Click the below button to generate token';
-  bool badgeVisible = true;
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> getToken() async {
     String token = await Recaptcha.execute('submit') ?? 'null returned';
@@ -48,19 +47,12 @@ class _MyAppState extends State<MyApp> {
                     onPressed: getToken,
                     child: const Text('Get new token'),
                   ),
-                  if (!badgeVisible) const RecaptchaBrand(),
+                  const RecaptchaBrand(),
                 ],
               ),
               OutlinedButton.icon(
                 onPressed: () {
-                  if (badgeVisible) {
-                    Recaptcha.hideBadge();
-                  } else {
-                    Recaptcha.showBadge();
-                  }
-                  setState(() {
-                    badgeVisible = !badgeVisible;
-                  });
+                  Recaptcha.toogleBadge();
                 },
                 icon: const Icon(Icons.legend_toggle),
                 label: const Text("Toggle Badge Visibilty"),

@@ -1,3 +1,7 @@
+## 0.0.3+1
+
+* Improve the pub score.
+
 ## 0.0.3
 
 * Add the `RecaptchaBrand` widget.

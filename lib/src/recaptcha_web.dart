@@ -3,8 +3,7 @@ import 'dart:js_interop';
 import 'dart:js_interop_unsafe';
 
 import 'package:flutter/foundation.dart';
-import 'package:web/helpers.dart';
-import 'package:web/web.dart' as web;
+import 'package:web/web.dart';
 
 @JS('grecaptcha')
 external Grecaptcha get grecaptcha;
@@ -111,7 +110,7 @@ class RecaptchaImpl {
   /// change the reCaptcha badge visibility
   static Future<void> changeVisibility(bool showBagde) async {
     if (!kIsWeb) return;
-    var badge = web.document.querySelector(".grecaptcha-badge") as HTMLElement?;
+    var badge = document.querySelector(".grecaptcha-badge") as HTMLElement?;
     if (badge == null) return;
     badge.style.zIndex = "10";
     badge.style.visibility = showBagde ? "visible" : "hidden";
@@ -128,11 +127,11 @@ class RecaptchaImpl {
         'https://www.google.com/recaptcha/api.js?render=$_recaptchaKey';
 
     // Script already exists.
-    if (web.document.querySelector('script#$scriptId') != null) {
+    if (document.querySelector('script#$scriptId') != null) {
       return;
     }
 
-    final web.HTMLScriptElement script = web.HTMLScriptElement()
+    final HTMLScriptElement script = HTMLScriptElement()
       ..id = scriptId
       ..src = scriptUrl;
 
@@ -142,7 +141,7 @@ class RecaptchaImpl {
       }
     }.toJS;
 
-    web.document.head!.appendChild(script);
+    document.head!.appendChild(script);
 
     /// TODO: Avoid using the `Future.delayed` if possible
     Future.doWhile(() async {

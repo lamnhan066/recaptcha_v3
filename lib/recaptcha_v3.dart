@@ -1,4 +1,4 @@
-library recaptcha_v3;
+library;
 
 export 'src/recaptcha.dart';
 export 'src/recaptcha_brand.dart';

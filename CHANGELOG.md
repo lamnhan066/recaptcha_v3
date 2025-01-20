@@ -1,3 +1,7 @@
+## 0.2.0
+
+* Bump the web package to `^1.1.0`. (Thanks @san-smith)ß
+
 ## 0.1.1
 
 * Add a small delay to the `ready` method to decrease the known issue happened on Flutter stable (3.22.2) and beta (3.23.0-0.1.pre). You can change this value to `null` when you use it on Flutter master channel.

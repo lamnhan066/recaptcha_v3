@@ -25,6 +25,7 @@ class RecaptchaImpl {
   static final _readyCompleter = Completer<void>();
   static bool _isReadyCalled = false;
   static final _isShowingBadge = ValueNotifier(false);
+  static bool? _pendingBadgeVisibility;
 
   /// Return `true` if the badge is showing.
   static ValueNotifier<bool> get isShowingBadge => _isShowingBadge;
@@ -43,9 +44,11 @@ class RecaptchaImpl {
     if (_readyCompleter.isCompleted) return;
     _isReadyCalled = true;
     _recaptchaKey = key;
+    _pendingBadgeVisibility = showBadge;
+    _isShowingBadge.value = showBadge;
     await _maybeLoadLibrary();
     await _waitForGrecaptchaReady(delay);
-    changeVisibility(showBadge);
+    await changeVisibility(showBadge);
     debugPrint('gRecaptcha V3 ready');
     if (!_readyCompleter.isCompleted) {
       _readyCompleter.complete();
@@ -91,11 +94,45 @@ class RecaptchaImpl {
   /// change the reCaptcha badge visibility
   static Future<void> changeVisibility(bool showBadge) async {
     if (!kIsWeb) return;
+
+    _pendingBadgeVisibility = showBadge;
+    _isShowingBadge.value = showBadge;
+
     var badge = document.querySelector(".grecaptcha-badge") as HTMLElement?;
-    if (badge == null) return;
+    if (badge != null) {
+      _applyBadgeVisibility(badge, showBadge);
+    } else {
+      // Badge not loaded yet, set up a watcher to apply visibility when it appears
+      _watchForBadgeInsertion(showBadge);
+    }
+  }
+
+  static void _applyBadgeVisibility(HTMLElement badge, bool showBadge) {
     badge.style.zIndex = "10";
     badge.style.visibility = showBadge ? "visible" : "hidden";
-    _isShowingBadge.value = showBadge;
+  }
+
+  static void _watchForBadgeInsertion(bool showBadge) {
+    // Use a short polling approach to check for badge insertion
+    // This is simpler than MutationObserver for this use case
+    const maxAttempts = 50; // ~5 seconds at 100ms intervals
+    var attempts = 0;
+
+    Timer.periodic(const Duration(milliseconds: 100), (timer) {
+      attempts++;
+      final badge = document.querySelector(".grecaptcha-badge") as HTMLElement?;
+
+      if (badge != null) {
+        timer.cancel();
+        // Check if we still need to apply the pending visibility
+        if (_pendingBadgeVisibility == showBadge) {
+          _applyBadgeVisibility(badge, showBadge);
+        }
+      } else if (attempts >= maxAttempts) {
+        timer.cancel();
+        debugPrint('reCAPTCHA badge not found after watching for insertion');
+      }
+    });
   }
 
   /// Load the barcode reader library.

@@ -1,6 +1,11 @@
+## 0.2.1
+
+* Fix badge visibility not working when `showBadge`/`hideBadge` are called before the reCAPTCHA badge element loads.
+* Add browser-only tests for badge visibility behavior.
+
 ## 0.2.0
 
-* Bump the web package to `^1.1.0`. (Thanks @san-smith)ß
+* Bump the web package to `^1.1.0`. (Thanks @san-smith)
 
 ## 0.1.1
 
